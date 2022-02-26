@@ -9,9 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(ggExtra)
-library(plotly)
 library(ggplot2)
-library(grid)
 source("../source/analysis.R")
 ```
 
@@ -98,7 +96,7 @@ Next, we will try to see if there is any correlation with the number of prisoner
 
 
 
-```{r correlation_plot, echo = FALSE, warning = FALSE, message = FALSE}
+```{r correlation_plot, echo = FALSE, warning = FALSE, message = FALSE }
 source("../source/analysis.R")
 correlation_plot
 ```
@@ -106,7 +104,6 @@ correlation_plot
 ### Chart 3 : Geographical View of Prison Population 2016
 
 Finally, we will visualize what races are most imprisoned in each county in 2016. For completeness, a map is shown for each race across the United States. This map will tell us what racial groups may be targeted the most based on the location within the country. While these maps reflect the racial demographics for each county, the magnitude of the maximum prison rate for some races in some counties is very telling. For example, there are numerous counties in the south where the majority of prisonders ( > 80%) are black. Similarly, there are a number of counties within Texas, California, Utah, and Arizona where Hispanic people make up a similar 80%+ of the prison population. Asian American and Pacific Islanders have very low prison rates compared to the rest of the races, but there still are some counties that appear to have disproportionate prison rates for these groups compared to the rest of the country. Similarly, Native Americans have specific counties where the data suggests they may be unfairly targeted for prison. These maps are insightful to find specific counties that may unfairly treat specific racial groups.
-
 ```{r white_jail_rate_map, r black_jail_rate_map, r aapi_jail_rate_map, r latinx_jail_rate_map, r native_jail_rate_map, echo = FALSE, warning = FALSE, message = FALSE}
 source("../source/analysis.R")
 white_jail_rate_map
