@@ -1,0 +1,117 @@
+---
+title: "Incarceration"
+author: "Saranya Gores"
+date: "2/24/2022"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(ggExtra)
+library(plotly)
+library(ggplot2)
+library(grid)
+source("../source/analysis.R")
+```
+
+## Introduction
+Racial inequality is a problem that is well known in the US, but the depths of racial inequality are not necessarily well understood. This project will take a look at existing data for prison populations based on race, and investigate potential trends of racial bias/inequality. The project will use prison data published by the Vera Institute. Not all states have up to date data. The most recent data is from 2016.
+
+## Summary Information
+
+This section will explore some high level information about prison rates within the country. Across the entire nation, roughly 0.60% of the population is in prison in 2016. The state with the highest prison rate is Oklahoma at a rate of ~1.1%, nearly double that of the national average.
+
+In 2016,white people in America have a national prison rate of ~0.40%. Black people have a national prison rate of ~1.83%.  Hispanic people have a national prison rate of ~0.55%. Native Americans have a national prison rate of ~1.17%, Asian Americans + Pacific Islanders have a national prison rate of ~0.05%.
+
+These trends show potential bias against mainly Black, Native American, and Hispanic people within America.
+
+
+1. The average percentage of population in jail across all the counties in 2016.
+
+```{r average_jail_percentage, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+average_jail_percentage
+```
+
+2. The State with the highest number of jail population and it's prison population percentage.
+
+```{r highest_prison_pop_state, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+highest_prison_pop_state
+```
+
+3. The national prison rate for White people in 2016.
+
+```{r white_national_prison_rate, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+white_national_prison_rate
+```
+
+4. The national prison rate for Black people in 2016.
+
+```{r black_national_prison_rate, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+black_national_prison_rate
+```
+
+5. The national prison rate for Hispanic people in 2016.
+
+```{r latinx_national_prison_rate, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+latinx_national_prison_rate
+```
+
+6. The national prison rate for Native Americans in 2016.
+
+```{r native_national_prison_rate, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+native_national_prison_rate
+```
+
+7. The national prison rate for Asian Americans / Pacific Islanders in 2016.
+
+```{r aapi_national_prison_rate, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+aapi_national_prison_rate
+```
+
+
+## Charts
+
+### Chart 1 : National Jail Rate per 10,000 population from 1990 to 2016
+
+We can look at prejudice within the policing and prison system over time by looking at how the prison rate of each race changes over time. This graph will show a breakdown of how many imprisoned people there are per 10,000 for each race. We can see that from 1990 - 2000, Black and Hispanic populations had increases in prison rate that reversed after the year 2000. The prison rate of Native Americans and Whites however, have been steadily increasing with no such inflection point. Asian Americans and Pacific Islands have remained at a relatively low prison rate.
+
+What this tells us is that Black, Hispanic, and Native Americans in America are probably over imprisoned due to their high prison rate However, this trend has been improving for Black and Hispanic people when compared to 1990.Native Americans continue to be shown increasing prejudice from the justice system into 2016 onwards.
+
+
+```{r jail_rate_over_time_plot, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+jail_rate_over_time_plot
+```
+
+
+### Chart 2 : Total Prison Population vs. Prison Rate by Race 2016
+
+Next, we will try to see if there is any correlation with the number of prisoners and the makeup of prisoners by race in 2016. This chart will plot the prison rate for each race for each jail in America that has at least 100 prisoners in it. We'll draw trendlines to see if there is a correlation between prison size and the population of prisoners being a certain race. What we see is a positive correlation between prison size and the percentage of prisoners being black or hispanic. There is a negative correlation between prison size and percentage of prisoners for the other races captured in this data. What this suggests is that the increase in prison population is a result of more black and Hispanic people being imprisoned, which also suggests that these groups of people are targeted and overprisoned within America.
+
+
+
+```{r correlation_plot, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+correlation_plot
+```
+
+### Chart 3 : Geographical View of Prison Population 2016
+
+Finally, we will visualize what races are most imprisoned in each county in 2016. For completeness, a map is shown for each race across the United States. This map will tell us what racial groups may be targeted the most based on the location within the country. While these maps reflect the racial demographics for each county, the magnitude of the maximum prison rate for some races in some counties is very telling. For example, there are numerous counties in the south where the majority of prisonders ( > 80%) are black. Similarly, there are a number of counties within Texas, California, Utah, and Arizona where Hispanic people make up a similar 80%+ of the prison population. Asian American and Pacific Islanders have very low prison rates compared to the rest of the races, but there still are some counties that appear to have disproportionate prison rates for these groups compared to the rest of the country. Similarly, Native Americans have specific counties where the data suggests they may be unfairly targeted for prison. These maps are insightful to find specific counties that may unfairly treat specific racial groups.
+
+```{r white_jail_rate_map, r black_jail_rate_map, r aapi_jail_rate_map, r latinx_jail_rate_map, r native_jail_rate_map, echo = FALSE, warning = FALSE, message = FALSE}
+source("../source/analysis.R")
+white_jail_rate_map
+black_jail_rate_map
+aapi_jail_rate_map 
+latinx_jail_rate_map
+native_jail_rate_map
+```
