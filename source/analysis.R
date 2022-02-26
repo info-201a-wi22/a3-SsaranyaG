@@ -1,20 +1,9 @@
 library(tidyverse)
 library(ggExtra)
-library(plotly)
 library(ggplot2)
-library(grid)
-library(gridExtra)
 
 jail_data <- read.csv('https://github.com/vera-institute/incarceration-trends/raw/master/incarceration_trends.csv')
 
-jail_data %>% filter(year == 2016) %>% 
-    filter(state == 'WA') %>%
-    mutate(asian_prison_rate = aapi_prison_pop / total_prison_pop,
-           black_prison_rate = black_prison_pop / total_prison_pop,
-           latin_prison_rate = latinx_prison_pop / total_prison_pop) %>%
-    summarize(state, county_name, asian_prison_rate, aapi_prison_pop_rate, 
-              black_prison_rate, black_prison_pop_rate)
-    
 # What is the State / County with the highest % of incarcerated adults
 jail_data %>% filter(year == 2016) %>% 
   filter(total_pop_15to64 > 1000) %>%
@@ -32,7 +21,6 @@ average_jail_percentage <- jail_data %>% filter(year == 2016) %>%
   pull(jailed_percentage) %>%
   round(3)
 # 0.60 % (not to be confused with 60%)
-
 
 # What is the State with the highest % of incarcerated adults
 highest_prison_pop_state <- jail_data %>% filter(year == 2016) %>% 
@@ -89,8 +77,9 @@ aapi_national_prison_rate <- jail_data %>% filter(year == 2016) %>%
   pull(jailed_percentage) %>%
   round(3)
 
-
 ## Chart 1: number of people in prison / total population by race over time.
+
+# filtering data for each race
 asian_prison_rate_by_year <- jail_data %>% 
   filter(year <= 2016 & year >= 1970) %>% 
   filter(!is.na(aapi_prison_pop) & !is.na(aapi_pop_15to64) & aapi_pop_15to64 > 100 
@@ -131,12 +120,14 @@ native_prison_rate_by_year <- jail_data %>%
   summarize(prison_rate_of_population = sum(native_prison_pop) / sum(native_pop_15to64) * 10000, 
             race = 'Native American')
 
+# join data of each race
 time_data <- asian_prison_rate_by_year %>% 
   union(black_prison_rate_by_year) %>%
   union(hispanic_prison_rate_by_year) %>%
   union(white_prison_rate_by_year) %>%
   union(native_prison_rate_by_year)
 
+# plot jail rate over time
 jail_rate_over_time_plot <- ggplot(time_data, aes(x = year, y = prison_rate_of_population, color = race)) +
   geom_line() + 
   geom_point(size=1) +
@@ -149,7 +140,6 @@ jail_rate_over_time_plot <- ggplot(time_data, aes(x = year, y = prison_rate_of_p
 #   and county population
 #   and total prison pop
 #   and total prison admission
-
 asian_correlation_data <- jail_data %>% 
   filter(year == 2016) %>% 
   filter(!is.na(aapi_prison_pop) & !is.na(aapi_pop_15to64) & aapi_pop_15to64 > 100 & total_prison_pop > 100) %>%
@@ -212,7 +202,7 @@ p <- ggplot(correlation_data, aes(x = total_prison_pop, y = prison_rate, color =
 # Plot the scatter plot with marginal histograms
 correlation_plot <- ggMarginal(p, groupColour = TRUE, groupFill = TRUE)
 
-### Plot 3, a map using fips.
+## Plot 3, a map using fips.
 fips_by_county <- maps::county.fips %>%
   as.tibble %>% 
   extract(polyname, c("region", "subregion"), "^([^,]+),([^,]+)$") 
@@ -232,6 +222,7 @@ blank_theme <- theme_bw() +
     panel.border = element_blank()      
   )
 
+# Black jail rate map
 black_jail_rate_by_county <- jail_data %>%
   filter(year == 2016) %>%
   filter(!is.na(black_prison_pop) & !is.na(total_prison_pop)) %>%
@@ -248,12 +239,12 @@ black_jail_rate_map <- ggplot(black_jail_rate_fips) +
     size = .1        # thinly stroked
   ) +
   coord_map() + 
-  scale_fill_continuous(low = "#ff4f73", high = "#610014") +
+  scale_fill_continuous(low = "#fff2f5", high = "#610014") +
   labs(fill = "% of Prisoners\n That Are Black") +
   ggtitle("Black Prison Population 2016") +
   blank_theme
 
-
+# White jail rate map
 white_jail_rate_by_county <- jail_data %>%
   filter(year == 2016) %>%
   filter(!is.na(white_prison_pop) & !is.na(total_prison_pop)) %>%
@@ -275,7 +266,7 @@ white_jail_rate_map <- ggplot(white_jail_rate_fips) +
   ggtitle("White Prison Population 2016") +
   blank_theme
 
-
+# Asian American/Pacific Islander jail rate map
 aapi_jail_rate_by_county <- jail_data %>%
   filter(year == 2016) %>%
   filter(!is.na(aapi_prison_pop) & !is.na(total_prison_pop)) %>%
@@ -297,7 +288,7 @@ aapi_jail_rate_map <- ggplot(aapi_jail_rate_fips) +
   ggtitle("Asian American/Pacific Islander Prison Population 2016") +
   blank_theme
 
-
+# Hispanic jail rate map
 latinx_jail_rate_by_county <- jail_data %>%
   filter(year == 2016) %>%
   filter(!is.na(latinx_prison_pop) & !is.na(total_prison_pop)) %>%
@@ -319,6 +310,7 @@ latinx_jail_rate_map <- ggplot(latinx_jail_rate_fips) +
   ggtitle("Hispanic Prison Population 2016") +
   blank_theme
 
+# native americans jail rate map
 native_jail_rate_by_county <- jail_data %>%
   filter(year == 2016) %>%
   filter(!is.na(native_prison_pop) & !is.na(total_prison_pop)) %>%
